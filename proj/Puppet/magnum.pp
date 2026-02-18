@@ -1,0 +1,63 @@
+# Example: enabling magnum module in Puppet
+
+  rabbitmq_user { 'magnum':
+    admin    => true,
+    password => Deferred('vault_lookup::lookup', ["SECRET_PATH_57216/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+    provider => 'rabbitmqctl',
+    require  => Class['::rabbitmq'],
+  }
+
+  rabbitmq_user_permissions { 'magnum@/':
+    configure_permission => '.*',
+    write_permission     => '.*',
+    read_permission      => '.*',
+    provider             => 'rabbitmqctl',
+    require              => Class['::rabbitmq'],
+  }
+
+  class { '::magnum::db::mysql':
+    password => Deferred('vault_lookup::lookup', ["SECRET_PATH_55016/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  }
+
+  class { '::magnum::db':
+    database_connection => 'mysql://magnum:magnum@127.0.0.1/magnum',
+  }
+
+  class { '::magnum::keystone::domain':
+    domain_password => Deferred('vault_lookup::lookup', ["SECRET_PATH_9233/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  }
+
+  class { '::magnum::keystone::authtoken':
+    password => Deferred('vault_lookup::lookup', ["SECRET_PATH_42588/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  }
+
+  class { '::magnum::api':
+    host => '127.0.0.1',
+  }
+
+  class { '::magnum::keystone::auth':
+    password     => Deferred('vault_lookup::lookup', ["SECRET_PATH_4526/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+    public_url   => 'http://127.0.0.1:9511/v1',
+    internal_url => 'http://127.0.0.1:9511/v1',
+    admin_url    => 'http://127.0.0.1:9511/v1',
+  }
+
+  class { '::magnum':
+    rabbit_host         => '127.0.0.1',
+    rabbit_port         => '5672',
+    rabbit_userid       => 'magnum',
+    rabbit_password     => Deferred('vault_lookup::lookup', ["SECRET_PATH_12239/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+    rabbit_use_ssl      =>  false,
+    notification_driver => 'messagingv2',
+  }
+
+  class { '::magnum::conductor':
+  }
+
+  class { '::magnum::client':
+  }
+
+  class { '::magnum::certificates':
+    cert_manager_type => 'local'
+  }
+

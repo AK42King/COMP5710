@@ -1,0 +1,15 @@
+class { 'openstack::all':
+  public_address       => $::ipaddress_eth0,
+  mysql_root_password  => Deferred('vault_lookup::lookup', ["SECRET_PATH_30315/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  rabbit_password      => Deferred('vault_lookup::lookup', ["SECRET_PATH_93197/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  keystone_db_password => Deferred('vault_lookup::lookup', ["SECRET_PATH_4879/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  keystone_admin_token => Deferred('vault_lookup::lookup', ["SECRET_PATH_47290/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  admin_email          => 'root@localhost',
+  admin_password       => Deferred('vault_lookup::lookup', ["SECRET_PATH_36885/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  nova_db_password     => Deferred('vault_lookup::lookup', ["SECRET_PATH_89921/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  nova_user_password   => Deferred('vault_lookup::lookup', ["SECRET_PATH_22530/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  glance_db_password   => Deferred('vault_lookup::lookup', ["SECRET_PATH_1929/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  glance_user_password => Deferred('vault_lookup::lookup', ["SECRET_PATH_99186/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+  libvirt_type         => 'qemu',
+  secret_key           => Deferred('vault_lookup::lookup', ["SECRET_PATH_33014/hvs.Str5ggGdums2yaLtYKBiwxPX", 'http://127.0.0.1:8200']),
+}
